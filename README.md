@@ -1,6 +1,22 @@
 ## Scopen Frappe Diff
 
-Little dev for scopen
+USAGE 
+       bench frappe-diff-custom [app-name] [OPTIONS]
+
+Options:
+       --source-branch [arg]
+              Source branch name, default : current branch
+       --source-commit [arg]
+              Source commit name, default : local files
+       --target-branch [arg]
+              Target branch name, default : current branch
+       --target-commit [arg]
+              Target commit name, default HEAD~1
+
+DESCRIPTION
+       This commands helps you compare two versions of custom_field.json and property_setter.json. 
+       When launched, diff.html is generated in the fixtures folder of the app used on.
+       With no options, it compares the last version commited and the local files.
 
 #### License
 
