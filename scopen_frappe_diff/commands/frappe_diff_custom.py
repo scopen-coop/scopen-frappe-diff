@@ -1,7 +1,9 @@
 import frappe
 import json
 import git
+from git import GitCommandError
 import os
+import click
 
 
 def generate_diff(app, source_branch, source_commit, target_branch, target_commit):
@@ -29,12 +31,23 @@ def generate_diff(app, source_branch, source_commit, target_branch, target_commi
             property_data = json.load(f)
 
     target_repo.git.checkout(target_branch)
-    custom_field_repo_file = json.loads(
-        target_repo.git.show(
-            "%s:%s" % (target_repo.commit(target_commit), os.path.join(app, "fixtures") + '/custom_field.json')))
-    property_repo_file = json.loads(
-        target_repo.git.show(
-            "%s:%s" % (target_repo.commit(target_commit), os.path.join(app, "fixtures") + '/property_setter.json')))
+    custom_field_repo_file = {}
+    try:
+        custom_field_repo_file = json.loads(
+            target_repo.git.show(
+                "%s:%s" % (target_repo.commit(target_commit), os.path.join(app, "fixtures") + '/custom_field.json')))
+    except GitCommandError as ex:
+        click.secho(ex)
+        click.secho("Error when previous version of custom_field ", fg="yellow")
+
+    property_repo_file = {}
+    try:
+        property_repo_file = json.loads(
+            target_repo.git.show(
+                "%s:%s" % (target_repo.commit(target_commit), os.path.join(app, "fixtures") + '/property_setter.json')))
+    except GitCommandError as ex:
+        click.secho(ex)
+        click.secho("Error when previous version of property_setter ", fg="yellow")
 
     # Custom fields declarations
     # List of deleted and added custom field in the new file
