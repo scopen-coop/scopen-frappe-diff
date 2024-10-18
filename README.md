@@ -1,5 +1,10 @@
 ## Scopen Frappe Diff
 
+INSTALL 
+
+
+       bench get-app bench get-app https://github.com/scopen-coop/scopen-frappe-diff.git
+
 USAGE
 
        bench frappe-diff-custom [app-name] [OPTIONS]
@@ -23,7 +28,7 @@ DESCRIPTION
 
        This commands helps you compare two versions of custom_field.json and property_setter.json. 
        When launched, diff.html is generated in the fixtures folder of the app used on.
-       With no options, it compares the last version commited and the local files.
+       With no options, it compares the last version commited and the local files.      
 
 #### License
 
