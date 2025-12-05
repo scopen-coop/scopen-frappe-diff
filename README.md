@@ -3,7 +3,7 @@
 INSTALL 
 
 
-       bench get-app bench get-app https://github.com/scopen-coop/scopen-frappe-diff.git
+       bench get-app https://github.com/scopen-coop/scopen-frappe-diff.git
 
 USAGE
 
