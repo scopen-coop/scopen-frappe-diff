@@ -6,6 +6,22 @@ import os
 import click
 
 
+def write_property_name_cells(diff_html, property_name):
+    # DocType-level property setters are named "Doctype-property" (no fieldname)
+    name = property_name.split("-")
+    diff_html.write("<td>" + name[0] + "</td>\n")
+
+    if len(name) < 3:
+
+        diff_html.write("<td></td>\n")
+        diff_html.write("<td>" + name[1] + "</td>\n")
+
+    else:
+
+        diff_html.write("<td>" + name[1] + "</td>\n")
+        diff_html.write("<td>" + name[2] + "</td>\n")
+
+
 def generate_diff(app, source_branch, source_commit, target_branch, target_commit):
     path = frappe.get_app_path(app)
     git_path = os.path.split(path)[0]
@@ -318,11 +334,8 @@ def generate_diff(app, source_branch, source_commit, target_branch, target_commi
     diff_html.write("<tbody>\n")
 
     for new_property in new_property:
-        name = new_property['name'].split("-")
         diff_html.write("<tr>\n")
-        diff_html.write("<td>" + name[0] + "</td>\n")
-        diff_html.write("<td>" + name[1] + "</td>\n")
-        diff_html.write("<td>" + name[2] + "</td>\n")
+        write_property_name_cells(diff_html, new_property['name'])
         diff_html.write("<td>\n<table class=\"child_table\">\n")
 
         for name, value in new_property.items():
@@ -334,11 +347,8 @@ def generate_diff(app, source_branch, source_commit, target_branch, target_commi
         diff_html.write("</tr>\n")
 
     for old_property in old_property:
-        name = old_property['name'].split("-")
         diff_html.write("<tr>\n")
-        diff_html.write("<td>" + name[0] + "</td>\n")
-        diff_html.write("<td>" + name[1] + "</td>\n")
-        diff_html.write("<td>" + name[2] + "</td>\n")
+        write_property_name_cells(diff_html, old_property['name'])
         diff_html.write("<td>\n<table class=\"child_table\">\n")
 
         for name, value in old_property.items():
@@ -351,11 +361,8 @@ def generate_diff(app, source_branch, source_commit, target_branch, target_commi
 
     for prev_property, prev_items in property_before.items():
 
-        prev_property_name = prev_property.split("-")
         diff_html.write("<tr>\n")
-        diff_html.write("<td>" + prev_property_name[0] + "</td>\n")
-        diff_html.write("<td>" + prev_property_name[1] + "</td>\n")
-        diff_html.write("<td>" + prev_property_name[2] + "</td>\n")
+        write_property_name_cells(diff_html, prev_property)
         diff_html.write("<td>\n<table class=\"child_table\">\n<tbody>\n")
 
         for name, value in prev_items.items():
@@ -389,19 +396,8 @@ def generate_diff(app, source_branch, source_commit, target_branch, target_commi
 
     for new_property, new_items in property_after.items():
 
-        name = new_property.split("-")
         diff_html.write("<tr>\n")
-        diff_html.write("<td>" + name[0] + "</td>\n")
-
-        if len(name) < 3:
-
-            diff_html.write("<td></td>\n")
-            diff_html.write("<td>" + name[1] + "</td>\n")
-
-        else:
-
-            diff_html.write("<td>" + name[1] + "</td>\n")
-            diff_html.write("<td>" + name[2] + "</td>\n")
+        write_property_name_cells(diff_html, new_property)
 
         diff_html.write("<td>\n<table class=\"child_table\">\n")
 
